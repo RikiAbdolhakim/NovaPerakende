@@ -1,0 +1,37 @@
+version: 2
+
+models:
+  - name: stg_satis
+    description: "Her sipariş için satış kanalı, tarih ve indirim sonrası ciro."
+    columns:
+      - name: siparis_id
+        description: "Her siparişi tanımlayan benzersiz numara."
+        data_tests:
+          - not_null
+          - unique
+
+      - name: tarih
+        description: "Siparişin gerçekleştiği tarih."
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_takvim')
+                field: tarih
+
+  - name: stg_takvim
+    description: "2024 yılının her günü için normal gün, tam tatil veya yarım tatil bilgisi."
+    columns:
+      - name: tarih
+        description: "Takvimde her gün için tek kayıt bulunur."
+        data_tests:
+          - not_null
+          - unique
+
+  - name: mart_gunluk_kanal
+    description: "Her tarih ve satış kanalı için sipariş sayısı, satılan adet ve net ciro."
+    columns:
+      - name: siparis_sayisi
+        description: "O gün ilgili kanaldaki benzersiz sipariş sayısı."
+        data_tests:
+          - not_null
